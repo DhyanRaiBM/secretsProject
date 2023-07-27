@@ -1,0 +1,64 @@
+1--Simple database
+2--mongoose-encryption
+3--hashing-MD5
+4--hashing+salting-bcrypt //curretly-deprecated
+5-session based Authorization:
+    const passport = require("passport");
+    const session= require("express-session");
+    passport-local=........
+
+Passport remembers the user through the use of sessions. Let's break down how this works:
+
+1. **Session**: In web development, a session is like a special memory space that the server creates for each user who visits the website. It's like a box that holds information about the user while they interact with the website.
+
+2. **Authentication Process**: When a user logs in to your web application, Passport verifies their credentials (e.g., username and password) to ensure they are valid. If the credentials are correct, Passport creates a session for that user.
+
+3. **Serialize User**: After successful authentication, Passport uses the `serializeUser()` method (as configured using `passport.serializeUser(User.serializeUser())`) to determine what user data to store in the session. Typically, the user's unique identifier (e.g., user ID) is stored.
+
+4. **Session ID**: Passport assigns a unique identifier (usually a session ID) to the user's session. This session ID is then sent back to the user's browser as a small piece of data, usually stored in a cookie.
+
+5. **Subsequent Requests**: As the user interacts with your web application, their browser automatically includes the session ID (stored in the cookie) in each subsequent request to your server.
+
+6. **Deserialize User**: On each request, when the server receives the session ID, Passport uses the `deserializeUser()` method (configured using `passport.deserializeUser(User.deserializeUser())`) to retrieve the stored user data (e.g., user ID) from the session.
+
+7. **User Object**: Passport then reconstructs the user object based on the retrieved user data. This user object is made available to your application, allowing you to access information about the logged-in user. This way, you can provide personalized experiences based on the user's identity and permissions.
+
+In summary, Passport remembers the user by creating a session for them after successful login. It stores essential user data, like their unique identifier, in the session. The session ID is sent back to the user's browser, and on subsequent requests, Passport uses the session ID to retrieve the user's data and reconstruct the user object. This process allows Passport to identify the user and maintain their logged-in state across different pages and interactions with your web application.
+
+-------------------------------------------------------------------------------------------
+In the code provided earlier, we are implementing a basic authentication system using Express, Mongoose, and Passport with a local strategy. Here's what is being done in the code:
+
+1. Setting up Dependencies:
+We start by setting up the necessary dependencies. We install and require the following packages:
+   - `express`: A popular web framework for Node.js.
+   - `express-session`: Middleware for managing user sessions.
+   - `passport`: A widely used authentication middleware for Node.js.
+   - `passport-local`: A strategy for Passport that handles username and password authentication.
+   - `mongoose`: A library for interacting with MongoDB, used for defining and working with our user model.
+   - `connect-flash`: Middleware for displaying flash messages to the user.
+
+2. Setting Up the User Model:
+We create a `User` model using Mongoose to represent the users of our application. The model has two properties: `username` and `password`.
+
+3. Configuring Express and Passport:
+We set up the Express app by adding necessary middleware for parsing request bodies, managing sessions, initializing Passport, and enabling flash messages.
+
+4. Configuring Passport Local Strategy:
+We configure Passport to use the `LocalStrategy`. The `LocalStrategy` is responsible for authenticating users based on their provided username and password. We define a callback function for the strategy to find the user in the database and check if the provided password matches the stored password.
+
+5. Implementing Login and Registration Routes:
+We create separate routes for handling user login and registration. The login route uses Passport's `passport.authenticate()` middleware with the `local` strategy to handle the login process. The registration route handles creating a new user and saving it to the database.
+
+6. Implementing the Dashboard (Protected) Route:
+We create a protected route for the dashboard. To access this route, the user must be authenticated. We use the `ensureAuthenticated` middleware function to check if a user is authenticated. If not, they are redirected to the login page.
+
+7. Views (Frontend):
+Although not included in the code provided, you would typically create views (HTML templates) for the login, registration, and dashboard pages. The views would contain forms for login and registration and display the flash messages.
+
+8. Connecting Routes to the Express App:
+We connect the login, registration, and dashboard routes to the Express app so that they are accessible via their respective URLs.
+
+Overall, this code sets up a basic local authentication system with Express, Mongoose, and Passport. Users can register, log in, and access the dashboard page if authenticated. Flash messages are used to provide feedback to users during the login process. Note that this is a basic implementation and might require further enhancements for a production-ready application, such as adding password hashing and proper error handling.
+
+------------------------------------------------------------------------------------------
+JWT Authentication:
